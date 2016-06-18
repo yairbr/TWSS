@@ -1,3 +1,3 @@
 module.exports = {
-	'users_url' : 'mongodb://localhost:28017/HotDiscDB'
+	'users_url' : 'mongodb://132.72.232.93:27017/TWSS'
 };

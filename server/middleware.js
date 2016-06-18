@@ -24,7 +24,7 @@ module.exports = function(app, express, passport){
   app.use(jsonParser);
 
   app.use(session({
-    secret: 'hsfjvhwuejhksjoviskjdheu',
+    secret: 'veryverysecretshit',
     saveUninitialized: true,
     resave: true,
     cookie: {maxAge: 3600000} //one hour
