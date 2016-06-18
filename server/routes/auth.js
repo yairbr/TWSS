@@ -9,7 +9,7 @@ module.exports = function(passport){
   });
 
   router.post('/login', passport.authenticate('local-login',{
-    successRedirect: '/discussions',
+    successRedirect: '/dashboard/index',
     failureRedirect: '/auth/login',
     failureFlash: true
     //session:true
@@ -21,17 +21,17 @@ module.exports = function(passport){
     res.redirect('/auth/login');
   });
 
-  /* USER REGISTRATION */
-  router.get('/register', function(req, res, next) {
-    res.render('register', { message: req.flash('registerMessage')});
-  });
+  // /* USER REGISTRATION */
+  // router.get('/register', function(req, res, next) {
+  //   res.render('register', { message: req.flash('registerMessage')});
+  // });
 
-  router.post('/register', passport.authenticate('local-register', {
-    successRedirect: '/auth/login',
-    failureRedirect: '/auth/register',
-    failureFlash: true
-    //session:true
-  }));
+  // router.post('/register', passport.authenticate('local-register', {
+  //   successRedirect: '/auth/login',
+  //   failureRedirect: '/auth/register',
+  //   failureFlash: true
+  //   //session:true
+  // }));
 
   return router;
     

@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 var userScheme = mongoose.Schema({
 	local: {
-		
 		_id : String,
 		_email : String,
 		_domain : String,

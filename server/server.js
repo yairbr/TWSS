@@ -5,7 +5,7 @@ var express = require('express');
 var passport = require('passport');
 var app = express();
 
-module.exports = function(io){
+module.exports = function(){
   /**
    * DB configurations
    */ 
@@ -15,8 +15,6 @@ module.exports = function(io){
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'db connection error'));
   db.once('open', function(){console.log('succefully connected to mongodb');});
-  var autoIncrement = require('mongoose-auto-increment');
-  autoIncrement.initialize(db);
 
   /**
    * Middleware of the server
@@ -26,7 +24,7 @@ module.exports = function(io){
   /**
    * Routes of the server + JSON API
    */ 
-  require('./routes/routes')(app, passport, autoIncrement, io);
+  require('./routes/routes')(app, passport);
 
   /**
   * Error handlers the server
