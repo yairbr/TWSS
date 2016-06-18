@@ -30,10 +30,10 @@ module.exports = function(passport){
 					return done(null, false, req.flash('registerMessage', 'That username is already taken'));
 				}else{
 					var newUser = new User();
-					newUser.username = username;
-					newUser.password = password;
-					newUser.firstname = req.body.fname;
-					newUser.lastname = req.body.lname;
+					newUser._id = username;
+					newUser._password = password;
+					newUser._firstname = req.body.fname;
+					newUser._lastname = req.body.lname;
 
 					newUser.save(function(err){
 						if (err){
@@ -54,13 +54,13 @@ module.exports = function(passport){
 	function(req, username, password, done){
 		process.nextTick(function(){
 			// console.log('args: ', username, '\n', password, '\n', req);
-			User.findOne({'username':username}, function(err, user){
+			User.findOne({'_id':username}, function(err, user){
 				if (err){
 					return done(err);
 				}
 				if (!user){
 					return done(null, false, req.flash('loginMessage', 'Invalid Username!'));
-				}if(user.password !== password){
+				}if(user._password !== password){
 					return done(null, false, req.flash('loginMessage', 'Invalid Password!'));
 				}
 				return done(null, user);
