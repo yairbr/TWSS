@@ -2,6 +2,8 @@ twssApp.controller('navController', ['$scope', '$location', function($scope, $lo
 	$scope.isActive = function(destination){
 		// console.log(destination);
 		// console.log($location.path());
-		return destination === $location.path();
+
+		return $location.path().indexOf(destination) > -1;
+		
 	};
 }]);
