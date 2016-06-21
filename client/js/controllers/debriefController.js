@@ -10,12 +10,8 @@ twssApp.directive('spaceHitCounter', function(){
   };
 });
 
-twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location){
+twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window', function($scope, $http, $cookies, $window){
   $scope.titleToRecommend = "";
-
-  if ($location.path().indexOf('/debrief') === -1){
-    console.log('changed!!');
-  }
 
   function writeJSONCookie(cookieName, data, options) {
     options = options || {};
@@ -70,6 +66,31 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$locati
       });
     }
   };
+
+  $scope.addDebrief = function(){
+    console.log('publishing');
+    var reqData = {
+      title : $scope.title,
+      what : "this is a test"
+    };
+
+    $http({
+        method:'POST',
+        url: '/api/add_debrief',
+        data: reqData
+      })
+      .success(function(newDebrief){
+        console.log(newDebrief);
+      })
+      .error(function(err, status){
+        console.log(err.status);
+      });
+    };
+
+    $scope.redirectToDebrief = function(debId){
+      var landingUrl = "http://" + $window.location.host + "/debrief/view/" + debId;
+      $window.open(landingUrl, '_blank');
+    };
 }]);
 
 twssApp.run( function($rootScope, $location, $cookies) {

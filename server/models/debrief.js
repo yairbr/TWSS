@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var debriefScheme = mongoose.Schema({
-	_id : mongoose.Schema.Types.ObjectId,
 	_cluster : Number,
 	_user : String,
 	_title : {   

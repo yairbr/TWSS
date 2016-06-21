@@ -67,6 +67,66 @@ module.exports = function(){
 
   });
 
+  router.post('/add_debrief', function(req, res, next) {
+    console.log('GOT REQUEST');
+    var title = req.body.title;
+    var what = req.body.what;
+    var userId = req.user._id;
+    console.log(title);
+    console.log(what);
+    console.log(userId);
+
+    console.log('adding debrief!');
+
+    // var deb = new Debrief();
+    // deb._cluster = 0;
+    // deb._title = {
+    //   _data : title,
+    //   _user : userId,
+    //   _score : 0,
+    //   _tags : []
+    // };
+    // deb._what = {
+    //   _data : what,
+    //   _user : userId,
+    //   _score : 0,
+    //   _tags : []
+    // };
+
+    // console.log(deb);
+    var deb = new Debrief({ 
+                                "_cluster" : 0,
+                                "_title" : {
+                                               "_data" : title,
+                                               "_user" : userId,
+                                               "_score" : 0,
+                                               "_tags" : []  },
+                                "_what" : {
+                                               "_data" : what,
+                                               "_user" : userId,
+                                               "_score" : 0,
+                                               "_tags" : []  },
+                                "_whys" : [],
+                                "_facts" : [],
+                                "_learnings" : []
+                                             });
+    console.log("*******************************************************************");
+    console.log(deb);
+    console.log("*******************************************************************");
+
+    deb.save(function (err, newDebrief) {
+      if (err) {
+        console.log("error saving debrief" + err);
+        res.json(err);
+      }
+      else {
+        console.log(newDebrief);
+        res.json(newDebrief);
+      }
+    });
+
+  });
+
   return router;
 
 };

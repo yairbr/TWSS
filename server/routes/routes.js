@@ -15,8 +15,29 @@ module.exports = function(app, passport){
     var path = require('path');
     var authRouter = require('./auth')(passport);
     var dashboardRouter = require('./dashboard')(passport, isLoggedIn("/auth/login"));
+    var mongoose = require('mongoose');
+
+    var Debrief = require('../models/debrief');
+
     app.use('/auth', authRouter);
     app.use('/dashboard', dashboardRouter);
+
+    app.get('/debrief/view/:debId', function(req, res, next){
+      var debId = mongoose.Types.ObjectId(req.params.debId);
+      console.log('redirecting to deb: ' + debId);
+      debrief = Debrief.findById(debId, function(err, deb){
+        if (err){
+          res.status(404).json({
+                message: 'Server Failed (debrief not found)'
+              });
+        }
+        console.log('**');
+        console.log(deb);
+        res.render('debrief_view', {deb : deb});
+      });
+      
+    });
+
     /*
      *  Server API
      */

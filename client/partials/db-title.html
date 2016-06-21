@@ -32,7 +32,8 @@
     <div class="row">
         <label ng-if="recommendedDebriefs.length > 0">Similar Debriefs</label>
         <div ng-repeat="recommendedDebrief in recommendedDebriefs">              
-            <a class="tag"> {{recommendedDebrief.title}} </a>
+            <!-- <a class="tag" ng-href='/debrief/view/{{recommendedDebrief.id}}' my-target> {{recommendedDebrief.title}} </a> -->
+            <a href="" class="tag" ng-click='redirectToDebrief(recommendedDebrief.id)'> {{recommendedDebrief.title}} </a>
         </div>
     </div>
 
@@ -40,7 +41,7 @@
         <div class="form-group">
             <label ng-if="tags.length > 0">Tags</label>
             <ul class="tags">
-              <li><a class="tag" ng-repeat="tag in tags">{{tag}}</a></li>
+              <li><label class="tag" ng-repeat="tag in tags">{{tag}}</label></li>
             </ul>
         </div>
     </div>
