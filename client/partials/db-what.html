@@ -1,5 +1,4 @@
-<!-- Page Heading -->
-<div class="row">
+<div class="row" id="topRow">
     <div class="col-lg-12">
         <h1 class="page-header">
             New Debrief
@@ -16,53 +15,41 @@
 </div>
 <!-- /.row -->
 
-<div class="row">
-    <div class="col-lg-12">
 
-        <form role="form">
+<form role="form">
 
-            <div class="form-group">
-                <label>What</label>
-                <textarea class="form-control" rows="5" placeholder="Enter you debrief story here..."></textarea>
-				<!-- <label>Group</label>
-				<input class="form-control">
-				<label>Categories</label> 
-				<input class="form-control"> -->
-			</div>
-
-
-            <div class="form-group">
-                <label>Tags</label>
-				<ul class="tags">
-				  <li><a href="#" class="tag">Tag1</a></li>
-				  <li><a href="#" class="tag">Tag2</a></li>
-				  <li><a href="#" class="tag">Tag3</a></li>
-				</ul>
-            </div>
-
-			<div class="form-group">
-				<div class="col-lg-6">
-					<p class="text-left"><a href='/debrief/title' class="btn btn-primary btn-lg" role="button">Back</a>
-					</p>
-				</div>
-
-				<div class="col-lg-6">
-					<p class="text-right">
-						<a href="#" ng-click="addDebrief()" 
-									class="btn btn-success btn-gl" role="button">
-							Publish
-						</a>
-					</p>
-				</div>
-
-				<p><span><br></span>
-				</p>
-			</div>							
-			
-        </form>
-
+    <div class="row">
+        <div class="form-group">
+            <label>What</label>
+            	<textarea rows = "5" class="form-control" ng-model="whatContext.what" space-hit-counter-what="sendWhat()" ng-blur="sendWhat()" placeholder="Write here what heappend...">
+            	</textarea> 
+        </div>
     </div>
-</div>
 
+    <div class="row">
+        <label ng-if="whatContext.recommendations.length > 0">Similar Debriefs</label>
+        <div ng-repeat="recommendedDebrief in whatContext.recommendations">              
+            <!-- <a class="tag" ng-href='/debrief/view/{{recommendedDebrief.id}}' my-target> {{recommendedDebrief.title}} </a> -->
+            <a href="" class="tag" ng-click='redirectToDebrief(recommendedDebrief.id)'> {{recommendedDebrief.title}} </a>
+        </div>
+    </div>
 
-<!-- /.row -->
+    <div class="row">
+        <div class="form-group">
+            <label ng-if="whatContext.tags.length > 0">Tags</label>
+            <ul class="tags">
+              <li><label class="tag" ng-repeat="tag in whatContext.tags">{{tag}}</label></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="row">
+
+        <div class="col-lg-12">     
+            <a href="/debrief/title" class="btn btn-primary btn-lg" role="button">&laquo; Back</a>
+            <!-- <a href='/debrief/group_phase' class="btn btn-success btn-lg" role="button" ng-click="addDebrief()" style="float:right">Publish </a> -->
+            <a href='' class="btn btn-success btn-lg" role="button" ng-click="addDebrief()" style="float:right"> Publish </a>
+        </div>
+    </div>
+                
+</form>

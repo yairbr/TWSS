@@ -1,17 +1,32 @@
-twssApp.directive('spaceHitCounter', function(){
+
+twssApp.directive('spaceHitCounterTitle', function(){
   return function(scope, element, attrs){
     element.bind("keypress", function(event){
       if (event.which === 32){
         scope.$apply(function(){
-          scope.$eval(attrs.spaceHitCounter);
+          scope.$eval(attrs.spaceHitCounterTitle);
         });
       }
     });
   };
 });
 
-twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window', function($scope, $http, $cookies, $window){
-  $scope.titleToRecommend = "";
+twssApp.directive('spaceHitCounterWhat', function(){
+  return function(scope, element, attrs){
+    element.bind("keypress", function(event){
+      if (event.which === 32){
+        scope.whatSpaceCounter++;
+        if (scope.whatSpaceCounter%7===0){
+          scope.$apply(function(){
+            scope.$eval(attrs.spaceHitCounterWhat);
+          });
+        }
+      }
+    });
+  };
+});
+
+twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window', '$location', function($scope, $http, $cookies, $window, $location){
 
   function writeJSONCookie(cookieName, data, options) {
     options = options || {};
@@ -23,28 +38,34 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
     return JSON.parse($cookies.get(cookieName));
   }
 
-  // $scope.recommendedDebriefs = [];
-  if (!readJSONCookie('recommendedDebriefs')) $scope.recommendedDebriefs = [];
-  else $scope.recommendedDebriefs = readJSONCookie('recommendedDebriefs');
-
-  // $scope.tags = [];
-  if (!readJSONCookie('tags')) $scope.tags = [];
-  else $scope.tags = readJSONCookie('tags');
-
-  if (!readJSONCookie('title')) $scope.title = [];
-  else $scope.title = readJSONCookie('title');
+  $scope.whatSpaceCounter = 0;
+  $scope.titleContext = {
+    title: "",
+    tags: [],
+    recommendations: []
+  };
+  $scope.whatContext = {
+    what: "",
+    tags: [],
+    recommendations: []
+  };
+  if (readJSONCookie('titleContext')){
+    $scope.titleContext = readJSONCookie('titleContext');
+  }
+  if (readJSONCookie('whatContext')){
+    $scope.whatContext = readJSONCookie('whatContext');
+  }
 
   $scope.sendTitle = function(){
     // console.log('sendTitle func triggered!');
-    $scope.titleToRecommend = $scope.title;
-    writeJSONCookie('title', $scope.titleToRecommend);
+    var titleToRecommend = $scope.titleContext.title;
 
     var reqData = {
-      text : $scope.titleToRecommend,
-      tags : $scope.tags
+      text : titleToRecommend,
+      tags : $scope.titleContext.tags
     };
 
-    if ($scope.titleToRecommend){
+    if (titleToRecommend){
       // console.log('sending data to server...: ' + reqData.text + ',' + reqData.tags);
       $http({
         method:'POST',
@@ -52,26 +73,50 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         data: reqData
       })
       .success(function(recommendation){
-        // console.log('got response from server! : ' + JSON.stringify(recommendation));
-        // recommendation.debriefs.foreach(function(item){
-        //   $scope.recommendedDebriefs.push(item.title);
-        // });
-        $scope.recommendedDebriefs = recommendation.debriefs;
-        writeJSONCookie('recommendedDebriefs', $scope.recommendedDebriefs);
-        $scope.tags = recommendation.tags;
-        writeJSONCookie('tags', $scope.tags);
+        $scope.titleContext.recommendations = recommendation.debriefs;
+        $scope.titleContext.tags = recommendation.tags;
+        writeJSONCookie('titleContext', $scope.titleContext);
       })
       .error(function(err, status){
+        // console.log('ERRROR');
+        console.log(err.status);
+      });
+    }
+  };
+
+  $scope.sendWhat = function(){
+    // console.log('sendWhat func triggered!');
+    var whatToRecommend = $scope.whatContext.what;
+
+    var reqData = {
+      text : whatToRecommend,
+      tags : $scope.whatContext.tags
+    };
+
+    if (whatToRecommend){
+      // console.log('sending data to server...: ' + reqData.text + ',' + reqData.tags);
+      $http({
+        method:'POST',
+        url: '/api/recommend/title',
+        data: reqData
+      })
+      .success(function(recommendation){
+        $scope.whatContext.recommendations = recommendation.debriefs;
+        $scope.whatContext.tags = recommendation.tags; //TODO: concat the tags from the title but keep them unique
+        writeJSONCookie('whatContext', $scope.whatContext);
+      })
+      .error(function(err, status){
+        // console.log('ERRROR');
         console.log(err.status);
       });
     }
   };
 
   $scope.addDebrief = function(){
-    console.log('publishing');
+    // console.log('publishing');
     var reqData = {
-      title : $scope.title,
-      what : "this is a test"
+      title : $scope.titleContext.title,
+      what : $scope.whatContext.what
     };
 
     $http({
@@ -80,9 +125,14 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         data: reqData
       })
       .success(function(newDebrief){
-        console.log(newDebrief);
+        // console.log(newDebrief);
+        var newDebId = newDebrief._id;
+        $cookies.remove('titleContext');
+        $cookies.remove('whatContext');
+        $location.path('/debrief/group_phase/' + newDebId);
       })
       .error(function(err, status){
+        // console.log('ERRROR');
         console.log(err.status);
       });
     };
@@ -95,11 +145,13 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
 
 twssApp.run( function($rootScope, $location, $cookies) {
   $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    // $cookies.remove('recommendedDebriefsByTitle');
     if (next.templateUrl){
+      // console.log('changed the partial to: ' + next.templateUrl);
       if (next.templateUrl.indexOf('db-') === -1){
-        $cookies.remove('recommendedDebriefs');
-        $cookies.remove('tags');
-        $cookies.remove('title');
+        // console.log('not in title or what');
+        $cookies.remove('titleContext');
+        $cookies.remove('whatContext');
       }
     }
   });

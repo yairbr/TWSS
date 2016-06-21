@@ -21,7 +21,7 @@
     <div class="row">
         <div class="form-group">
             <label>Title</label>
-            <input class="form-control" ng-model="title" space-hit-counter="sendTitle()" ng-blur="sendTitle()" placeholder="Debrief Title">
+            <input class="form-control" ng-model="titleContext.title" space-hit-counter-title="sendTitle()" ng-blur="sendTitle()" placeholder="Debrief Title">
             <label>Group</label>
             <input class="form-control">
             <label>Categories</label>
@@ -30,8 +30,8 @@
     </div>
 
     <div class="row">
-        <label ng-if="recommendedDebriefs.length > 0">Similar Debriefs</label>
-        <div ng-repeat="recommendedDebrief in recommendedDebriefs">              
+        <label ng-if="titleContext.recommendations.length > 0">Similar Debriefs</label>
+        <div ng-repeat="recommendedDebrief in titleContext.recommendations">              
             <!-- <a class="tag" ng-href='/debrief/view/{{recommendedDebrief.id}}' my-target> {{recommendedDebrief.title}} </a> -->
             <a href="" class="tag" ng-click='redirectToDebrief(recommendedDebrief.id)'> {{recommendedDebrief.title}} </a>
         </div>
@@ -39,9 +39,9 @@
 
     <div class="row">
         <div class="form-group">
-            <label ng-if="tags.length > 0">Tags</label>
+            <label ng-if="titleContext.tags.length > 0">Tags</label>
             <ul class="tags">
-              <li><label class="tag" ng-repeat="tag in tags">{{tag}}</label></li>
+              <li><label class="tag" ng-repeat="tag in titleContext.tags">{{tag}}</label></li>
             </ul>
         </div>
     </div>
