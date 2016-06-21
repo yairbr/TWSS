@@ -2,7 +2,7 @@ module.exports = function(){
 
   var express = require('express');
   var router = express.Router();
-  var recommendationEngine = require('../config/recommendationEngine')('132.72.234.235', 4000);
+  var recommendationEngine = require('../config/recommendationEngine')('132.73.195.153', 4000);
   var Debrief = require('../models/debrief');
   var mongoose = require('mongoose');
   var async = require('async');

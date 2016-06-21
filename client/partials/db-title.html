@@ -30,6 +30,7 @@
     </div>
 
     <div class="row">
+        <label ng-if="recommendedDebriefs.length > 0">Similar Debriefs</label>
         <div ng-repeat="recommendedDebrief in recommendedDebriefs">              
             <a class="tag"> {{recommendedDebrief.title}} </a>
         </div>
@@ -37,7 +38,7 @@
 
     <div class="row">
         <div class="form-group">
-            <label>Tags</label>
+            <label ng-if="tags.length > 0">Tags</label>
             <ul class="tags">
               <li><a class="tag" ng-repeat="tag in tags">{{tag}}</a></li>
             </ul>
@@ -46,31 +47,10 @@
     
     <div class="row">
 
-        <div class="col-lg-12">
-        <!-- <div class="form-group"> -->
-            <!-- <div style="width:50%"> -->
-                
+        <div class="col-lg-12">     
             <a href="/dashboard" class="btn btn-primary btn-lg" role="button">Cancel</a>
             <a href='/debrief/what' class="btn btn-success btn-lg" role="button" style="float:right">What Happened &raquo; </a>
-            <!-- </div> -->
         </div>
-
-        <!-- <div class="col-lg-6" dir="rtl"> -->
-            <!-- </div> -->
-
-            <!-- <div style="width:50%; float:right; align:top"> -->
-                
-          
-        <!-- </div> -->
     </div>
                 
-            <!-- </div> -->
 </form>
-
-
-<!-- </div>     -->
-
-
-    
-<!-- </div> -->
-<!-- /.row -->

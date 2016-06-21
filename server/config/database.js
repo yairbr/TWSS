@@ -1,3 +1,3 @@
 module.exports = {
-	'users_url' : 'mongodb://132.72.234.235:27017/TWSSDB'
+	'users_url' : 'mongodb://132.73.195.153:27017/TWSSDB'
 };

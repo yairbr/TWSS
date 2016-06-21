@@ -1,10 +1,10 @@
 var twssApp = angular.module('twssApp', [
-	'ngRoute'])
+	'ngRoute', 'ngCookies'])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/home.html', controller: 'homeController'});
-	$routeProvider.when('/debrief/title', {templateUrl: 'partials/title.html', controller: 'debriefController'});
-	$routeProvider.when('/debrief/what', {templateUrl: 'partials/what.html', controller: 'debriefController'});
+	$routeProvider.when('/debrief/title', {templateUrl: 'partials/db-title.html', controller: 'debriefController'});
+	$routeProvider.when('/debrief/what', {templateUrl: 'partials/db-what.html', controller: 'debriefController'});
 
 	$routeProvider.otherwise({redirectTo: '/dashboard'});
 
