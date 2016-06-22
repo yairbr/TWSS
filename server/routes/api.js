@@ -7,16 +7,6 @@ module.exports = function(io){
   var mongoose = require('mongoose');
   var async = require('async');
 
-  /* Real-Time */
-
-  io.on('connection', function(socket){
-    console.log('user connected!');
-
-    socket.on('disconnect', function(){
-      console.log('a user disconnected!');
-    });
-  });
-
 
 
   router.post('/recommend/title', function(req, res, next) {

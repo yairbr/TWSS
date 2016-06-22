@@ -24,24 +24,52 @@ module.exports = function(app, passport, io){
 
   app.get('/debrief/view/:debId', function(req, res, next){
     var debId = mongoose.Types.ObjectId(req.params.debId);
-    console.log('redirecting to deb: ' + debId);
-    debrief = Debrief.findById(debId, function(err, deb){
+    // console.log('redirecting to deb: ' + debId);
+    var debrief = Debrief.findById(debId, function(err, deb){
       if (err){
         res.status(404).json({
               message: 'Server Failed (debrief not found)'
             });
       }
-      console.log('**');
-      console.log(deb);
+      // console.log('**');
+      // console.log(deb);
       res.render('debrief_view', {deb : deb});
     });
-    
   });
+
+    /* Real-Time */
+    //TODO: define all the real time events
+
+    io.of('/companyname')
+        .on('')
+
+    io.on('connection', function(socket){
+        if (socket.request.session.passport) {
+            var userId = socket.request.session.passport.user;
+            console.log("Your User ID is", userId);
+
+
+
+            socket.on('disconnect', function(){
+                console.log('a user disconnected!');
+            });
+        }
+        else{
+
+        }
+    });
+
+
+
+
+
+
+
 
   /*
    *  Server API
    */
-  restApiRouter = require('./api')(io);
+  var restApiRouter = require('./api')(io);
   app.use('/api', restApiRouter);    
 
   app.get('*', isLoggedIn("/auth/login"), function(req, res, next) {

@@ -19,7 +19,7 @@ module.exports = function(io){
   /**
    * Express Middleware of the server
    */ 
-  require('./middleware')(app, express, passport);
+  require('./middleware')(app, express, passport, mongoose, io);
 
   /**
    * Routes of the server + Ajax API
