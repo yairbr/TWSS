@@ -18,6 +18,8 @@ module.exports = function(app, passport, io){
     var mongoose = require('mongoose');
 
     var Debrief = require('../models/debrief');
+    var User = require('../models/user');
+
     var addElement = require('../config/add_element')();
     var itemsSorter = require('../config/sort')();
 
@@ -42,13 +44,25 @@ module.exports = function(app, passport, io){
     /* Real-Time */
     //TODO: define all the real time events
 
-
+    var users = [];
 
     io.on('connection', function(socket){
         if (socket.request.session.passport) {
             socket.on('create-room', function(debId){
                 console.log('DEBUG: creating room... ' + debId);
-                socket.join(debId);
+                Debrief.findById(debId, function(debrief){
+                    var groups = debrief._groups;
+                    if(groups){
+                        groups.forEach(function(group){
+                            User.find({'_group' : group }, '_id',function(u){
+                                    if(!users.indexOf(u._id) > -1){
+                                        users.push(u._id);
+                                    }
+                                }
+                            );
+                        });
+                    }
+                });
             });
 
 

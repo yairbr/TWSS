@@ -116,7 +116,8 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
     // console.log('publishing');
     var reqData = {
       title : $scope.titleContext.title,
-      what : $scope.whatContext.what
+      what : $scope.whatContext.what,
+      groups: $scope.groups.split(',')
     };
 
     $http({

@@ -14,7 +14,7 @@ module.exports = function(host, port){
 	 return {
 
 	 	getRecommendations: function (req) {
-	 		console.log("engine: got the title: " + req.text);
+	 		// console.log("engine: got the title: " + req.text);
 	 		// var that = this;
 	 		// var gotReq = req;
 	        //var emp = "";
@@ -42,7 +42,7 @@ module.exports = function(host, port){
 	        		}
 	    			// Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
 	    			var fullReq = req_type + '_REC_REQ\nMessageId: ' + nMessageId + '\nUserId: ' + nUserId + '\nText:' + nText + '\nTags:' + tags + '\n@\n';
-	    			console.log('sending req: ' + fullReq);
+	    			// console.log('sending req: ' + fullReq);
 	    			client.write(fullReq);
 
 	    		});
@@ -51,7 +51,7 @@ module.exports = function(host, port){
 	            // Add a 'data' event handler for the client socket
 				// data is what the server sent to this socket
 				client.on('data', function(data) {
-					console.log('got from recommendation engine: ' + data);
+					// console.log('got from recommendation engine: ' + data);
 
 					try {
 						var receivedJson = JSON.parse(data);
