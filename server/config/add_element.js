@@ -6,7 +6,7 @@ module.exports = function(){
 
 // change here the rout
   router.post('/add_element', function(req, res, next) {
-    var type = "_" + req.type;
+    var type = "_" + req.type + 's';
     var text = req.text;
     var user = req.user;
     var debId = req.debId;

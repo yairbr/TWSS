@@ -1,26 +1,26 @@
 
 <!-- Page Heading -->
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            New Debrief
-        </h1>
-        <ol class="breadcrumb">
-            <li>
-                <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
-            </li>
-            <li class="active">
-                <i class="fa fa-edit"></i> New Debrief
-            </li>
-        </ol>
-    </div>
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			New Debrief
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+			</li>
+			<li class="active">
+				<i class="fa fa-edit"></i> New Debrief
+			</li>
+		</ol>
+	</div>
 </div>
 <!-- /.row -->
 
 
 <div class="row">
 	<div class="jumbotron">
-        <form role="form">
+		<form role="form">
 			<h2>Facts </h2>
 			<div class="form-group">
 				<label>Facts the lead the occasion </label>
@@ -29,35 +29,81 @@
 						<input class="form-control"  placeholder="Enter fact here ..." ng-model="fact">
 					</div>
 					<div class="col-lg-1">
-						<button type="button" class="btn btn-s btn-default" ng-click="sendFact()">Add</button>
-					</div> 
+						<button type="button" class="btn btn-s btn-default" ng-click=" sendFactElement()">Add</button>
+					</div>
 					<p>
 						<br>
 					</p>
 				</div>
 			</div>
 
-            <div class="form-group">
+			<div class="form-group" ng-if="factsPhase">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
 					</div>
 					<div class="panel-body">
 						<div class="list-group">
-                            <!-- An itme -->
-							<a class="list-group-item">
-                                <span class="badge">20 votes</span>
-                                <button style=" background:none;
+							<!-- An itme -->
+							<a class="list-group-item" ng-repeat="fact in facts">
+								<span class="badge">{{fact.votes}} Votes</span>
+								<button style=" background:none;
                                                 border:none;
                                                 font-size:1.2em;
-                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" > </button>
-                                <i class="fa fa-fw fa-user"> </i> <b> Username &nbsp;&nbsp;&nbsp;&nbsp;</b>Here should be the text 
-                            </a>
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="addElementVote(fact)"> </button>
+								<i class="fa fa-fw fa-user"> </i> <b> {{fact.usename}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{fact.text}}
+							</a>
 
 						</div>
 					</div>
 				</div>
-            </div>
-        </form>
+			</div>
+			<button class="btn btn-primary btn-lg" ng-click="changeDiv('why')"></button>
+
+			<div class="form-group" ng-if="whyPhase">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+					</div>
+					<div class="panel-body">
+						<div class="list-group">
+							<!-- An itme -->
+							<a class="list-group-item" ng-repeat="why in whys">
+								<span class="badge">{{why.votes}} Votes</span>
+								<button style=" background:none;
+                                                border:none;
+                                                font-size:1.2em;
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="addElementVote(why)"> </button>
+								<i class="fa fa-fw fa-user"> </i> <b> {{why.usename}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{why.text}}
+							</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<button class="btn btn-primary btn-lg" ng-click="changeDiv('learning')"></button>
+
+			<div class="form-group" ng-if="learningPhase">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+					</div>
+					<div class="panel-body">
+						<div class="list-group">
+							<!-- An itme -->
+							<a class="list-group-item" ng-repeat="learning in learnings">
+								<span class="badge">{{learning.votes}} Votes</span>
+								<button style=" background:none;
+                                                border:none;
+                                                font-size:1.2em;
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="addElementVote(learning)"> </button>
+								<i class="fa fa-fw fa-user"> </i> <b> {{fact.usename}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{learning.text}}
+							</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
