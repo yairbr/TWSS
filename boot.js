@@ -3,11 +3,14 @@
  */
 console.log('in boot...');
 
-// The Main Server App: DB + Authentication + Middleware + Routes + API
-var app = require('./server/server.js')();
+// Real-Time SocketIO server
+var io = require('socket.io')();
 
 // The HTTP framework from Node
 var http = require('http');
+
+// The Main Express Logic App: Middleware + Authentication + DB + Routes + API(Ajax)
+var app = require('./server/server.js')(io);
 
 // The Server Error Handling
 var error_handlers = require('./server/server_critic_error_handlers');
@@ -23,7 +26,7 @@ app.set('port', port);
  */
 var server = http.createServer(app);
 // io.attach(server);
-// io.listen(server);
+io.listen(server);
 server.on('error', error_handlers.onError);
 server.on('listening', error_handlers.onListening(server));
 

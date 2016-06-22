@@ -1,36 +1,36 @@
-module.exports = function(){
+module.exports = function(io){
 
   var express = require('express');
   var router = express.Router();
-  var recommendationEngine = require('../config/recommendationEngine')('132.73.195.153', 4000);
+  var recommendationEngine = require('../config/recommendationEngine')('127.0.0.1', 5000);
   var Debrief = require('../models/debrief');
   var mongoose = require('mongoose');
   var async = require('async');
 
-  router.post('/recommend/title', function(req, res, next) {
-    var messageId = "1"; //TODO: should be deprecated
-    var req_type = "TITLE";
-    var text = req.body.text;
-    var userId = req.user._id;
-    var tags = req.body.tags;
+  /* Real-Time */
 
+  io.on('connection', function(socket){
+    console.log('user connected!');
+
+    socket.on('disconnect', function(){
+      console.log('a user disconnected!');
+    });
+  });
+
+
+
+  router.post('/recommend/title', function(req, res, next) {
     var recommendReq = {
-      "messageId" : messageId,
-      "req_type" : req_type,
-      "text" : text,
-      "userId" : userId,
-      "tags" : tags
+      "messageId" : "1", //TODO: should be deprecated
+      "req_type" : "TITLE",
+      "text" : req.body.text,
+      "userId" : req.user._id,
+      "tags" : req.body.tags
     };
-    
-    // console.log('**');
-    // console.log('got the title: ' + text);
-    // console.log('**');
-    // console.log('sending to recommending engine: ' + JSON.stringify(recommendReq));
+
     recommendationEngine.getRecommendations(recommendReq)
     .then(
       function success(data){
-        // console.log('**');
-        // console.log('got response: ' + JSON.stringify(data));
         var debriefIds = data.debriefs;
         var debriefIdsAndTitles = [];
         debriefIds.forEach(function(id, idx){debriefIds[idx] = mongoose.Types.ObjectId(id);});
@@ -41,10 +41,6 @@ module.exports = function(){
                 message: 'Server Failed (debrief not found)'
               });
             } else {
-              // console.log('**');
-              // console.log('old debriefs in data: ' + data.debriefs.toString());
-              // console.log('**');
-              // console.log(data); 
               debriefs.forEach(function(deb){
                 var newItem = {title: "", id:""};
                 var title = deb._title._data;
@@ -54,8 +50,48 @@ module.exports = function(){
                 debriefIdsAndTitles.push(newItem);
               });
               data.debriefs = debriefIdsAndTitles;
-              // console.log('**');
-              // console.log('NEW debriefs in data: ' + data.debriefs.toString());
+              res.json(data);
+            }
+        });
+        
+      }, function error(err){
+        console.log(err);
+        res.json(err);
+      });
+
+  });
+
+  router.post('/recommend/what', function(req, res, next) {
+    var recommendReq = {
+      "messageId" : "1", //TODO: should be deprecated
+      "req_type" : "WHAT",
+      "text" : req.body.text,
+      "userId" : req.user._id,
+      "tags" : req.body.tags
+    };
+
+    recommendationEngine.getRecommendations(recommendReq)
+    .then(
+      function success(data){
+        var debriefIds = data.debriefs;
+        var debriefIdsAndTitles = [];
+        debriefIds.forEach(function(id, idx){debriefIds[idx] = mongoose.Types.ObjectId(id);});
+
+        Debrief.find({'_id' : {'$in' : debriefIds}},{'_id':1, '_what._data':1}).exec(function (err, debriefs){
+            if(err){
+             res.status(404).json({
+                message: 'Server Failed (debrief not found)'
+              });
+            } else {
+              debriefs.forEach(function(deb){
+                var newItem = {what: "", id:""};
+                var what = deb._what._data;
+                var id = deb._id;
+                newItem.what = what;
+                newItem.id = id;
+                debriefIdsAndTitles.push(newItem);
+              });
+              data.debriefs = debriefIdsAndTitles;
               res.json(data);
             }
         });
@@ -72,47 +108,26 @@ module.exports = function(){
     var title = req.body.title;
     var what = req.body.what;
     var userId = req.user._id;
-    console.log(title);
-    console.log(what);
-    console.log(userId);
-
-    console.log('adding debrief!');
-
-    // var deb = new Debrief();
-    // deb._cluster = 0;
-    // deb._title = {
-    //   _data : title,
-    //   _user : userId,
-    //   _score : 0,
-    //   _tags : []
-    // };
-    // deb._what = {
-    //   _data : what,
-    //   _user : userId,
-    //   _score : 0,
-    //   _tags : []
-    // };
-
-    // console.log(deb);
     var deb = new Debrief({ 
-                                "_cluster" : 0,
-                                "_title" : {
-                                               "_data" : title,
-                                               "_user" : userId,
-                                               "_score" : 0,
-                                               "_tags" : []  },
-                                "_what" : {
-                                               "_data" : what,
-                                               "_user" : userId,
-                                               "_score" : 0,
-                                               "_tags" : []  },
-                                "_whys" : [],
-                                "_facts" : [],
-                                "_learnings" : []
-                                             });
-    console.log("*******************************************************************");
-    console.log(deb);
-    console.log("*******************************************************************");
+      "_cluster" : 0,
+      "_title" : 
+        {
+         "_data" : title,
+         "_user" : userId,
+         "_score" : 0,
+         "_tags" : []  
+        },
+      "_what" : 
+        {
+         "_data" : what,
+         "_user" : userId,
+         "_score" : 0,
+         "_tags" : []  
+        },
+      "_whys" : [],
+      "_facts" : [],
+      "_learnings" : []
+   });
 
     deb.save(function (err, newDebrief) {
       if (err) {
@@ -120,6 +135,7 @@ module.exports = function(){
         res.json(err);
       }
       else {
+        console.log('new Debrief saved:');
         console.log(newDebrief);
         res.json(newDebrief);
       }

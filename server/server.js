@@ -5,7 +5,7 @@ var express = require('express');
 var passport = require('passport');
 var app = express();
 
-module.exports = function(){
+module.exports = function(io){
   /**
    * DB configurations
    */ 
@@ -17,14 +17,14 @@ module.exports = function(){
   db.once('open', function(){console.log('succefully connected to mongodb');});
 
   /**
-   * Middleware of the server
+   * Express Middleware of the server
    */ 
   require('./middleware')(app, express, passport);
 
   /**
-   * Routes of the server + JSON API
+   * Routes of the server + Ajax API
    */ 
-  require('./routes/routes')(app, passport);
+  require('./routes/routes')(app, passport, io);
 
   /**
   * Error handlers the server

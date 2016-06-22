@@ -97,7 +97,7 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
       // console.log('sending data to server...: ' + reqData.text + ',' + reqData.tags);
       $http({
         method:'POST',
-        url: '/api/recommend/title',
+        url: '/api/recommend/what',
         data: reqData
       })
       .success(function(recommendation){
@@ -130,6 +130,8 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         $cookies.remove('titleContext');
         $cookies.remove('whatContext');
         $location.path('/debrief/group_phase/' + newDebId);
+        // var landingUrl = "http://" + $window.location.host + "/debrief/group_phase/" + newDebId;
+        // $window.open(landingUrl);
       })
       .error(function(err, status){
         // console.log('ERRROR');

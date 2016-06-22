@@ -26,10 +26,10 @@
 				<label>Facts the lead the occasion </label>
 				<div >
 					<div class="col-lg-11"  style="padding-left : 0">
-						<input class="form-control"  placeholder="Enter fact here ...">
+						<input class="form-control"  placeholder="Enter fact here ..." ng-model="fact">
 					</div>
 					<div class="col-lg-1">
-						<button type="button" class="btn btn-s btn-default">Add</button>
+						<button type="button" class="btn btn-s btn-default" ng-click="sendFact()">Add</button>
 					</div> 
 					<p>
 						<br>
@@ -53,7 +53,7 @@
                                                 color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" > </button>
                                 <i class="fa fa-fw fa-user"> </i> <b> Username &nbsp;&nbsp;&nbsp;&nbsp;</b>Here should be the text 
                             </a>
-                            
+
 						</div>
 					</div>
 				</div>

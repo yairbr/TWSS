@@ -9,7 +9,7 @@ module.exports = function(){
     var type = "_" + req.type;
     var text = req.text;
     var user = req.user;
-    var id = req.id;
+    var debId = req.debId;
     var tags = [];
 
     var obj = {
@@ -20,7 +20,7 @@ module.exports = function(){
     };
 
     Debrief.findByIdAndUpdate(
-      id,
+      debId,
       {'$push': {type: obj }},
       {safe: true, upsert: true, new : true},
       function(err, data) {

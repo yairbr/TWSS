@@ -11,7 +11,7 @@ module.exports = function(passport, isLoggedIn){
 
     /* ADMIN DASHBOARD */
     router.get('/', isLoggedIn, function(req, res, next) {
-      res.render('index', { });
+      res.render('index', {  });
     });
 
     return router;
