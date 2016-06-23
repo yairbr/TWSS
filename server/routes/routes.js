@@ -8,7 +8,6 @@ var isLoggedIn = function(loginRedirect){
 };
 
 module.exports = function(app, passport, io){
-
     /*
      *  Server Routing
      */
@@ -18,10 +17,10 @@ module.exports = function(app, passport, io){
     var mongoose = require('mongoose');
 
     var Debrief = require('../models/debrief');
-    var User = require('../models/user');
-
-    var addElement = require('../config/add_element')();
-    var itemsSorter = require('../config/sort')();
+    // var User = require('../models/user');
+    //
+    // var addElement = require('../config/add_element')();
+    // var itemsSorter = require('../config/sort')();
 
     app.use('/auth', authRouter);
     app.use('/dashboard', dashboardRouter);
@@ -40,62 +39,58 @@ module.exports = function(app, passport, io){
             res.render('debrief_view', {deb : deb});
         });
     });
+    
+    var restApiRouter = require('./api')();
+    app.use('/api', restApiRouter);
+
+    app.get('*', isLoggedIn("/auth/login"), function(req, res, next) {
+        res.render('index', { });
+    });
+
+
 
     /* Real-Time */
     //TODO: define all the real time events
 
     var users = [];
+    var types = {
+        fact:[],
+        why:[],
+        learning:[]
+    };
 
     io.on('connection', function(socket){
+        console.log('CONNECTED!!!!');
         if (socket.request.session.passport) {
-            socket.on('create-room', function(debId){
+            var user = socket.request.session.passport.user;
+            socket.on('join-to-room', function(debId) {
                 console.log('DEBUG: creating room... ' + debId);
-                Debrief.findById(debId, function(debrief){
-                    var groups = debrief._groups;
-                    if(groups){
-                        groups.forEach(function(group){
-                            User.find({'_group' : group }, '_id',function(u){
-                                    if(!users.indexOf(u._id) > -1){
-                                        users.push(u._id);
-                                    }
-                                }
-                            );
-                        });
-                    }
-                });
+                users.push(user);
+                socket.join(debId);
+                io.to(debId).emit('elements-refresh', types);
             });
 
-
-            var userId = socket.request.session.passport.user;
-            console.log("Your User ID is", userId);
-            if(users.indexOf(userId) > -1){
-                socket.on('add-element',function (msg) {
-                    console.log('DEBUG: adding an element...' + msg);
-                    var debId = msg.debId;
-                    var type  = msg.type;
-                    var text  = msg.text;
-
-                    var element = {
-                        'user'  : userId,
-                        'type'  : type,
-                        'text'  : text,
-                        'debId' : debId
+            socket.on('add-element', function(element) {
+                console.log('adding element : ' + element);
+                if(element) {
+                    var type = element.type;
+                    var elementToAdd = {
+                        user : user,
+                        score : 0,
+                        data : element.data
                     };
-                    addElement.add_element(element);
+                    var debId = element.debId;
+                    types[type].push(elementToAdd);
+                    console.log('new ' + type + ' data is: ' + types[type].toString());
+                    io.to(debId).emit(type + '-element-added', types[type]);
+                }
+            });
 
-                    var objToSort = {
-                        'type' : type,
-                        'debId' : debId
-                    };
-
-                    var ansArray = itemsSorter.sort(objToSort);
-                    io.to(debId).emit(type + '-element-added', ansArray);
-                });
-
-            }
             socket.on('disconnect', function(){
                 console.log('a user disconnected!');
             });
+
+
         }
         else{
 
@@ -104,18 +99,7 @@ module.exports = function(app, passport, io){
 
 
 
+    
 
 
-
-
-
-    /*
-     *  Server API
-     */
-    var restApiRouter = require('./api')(io);
-    app.use('/api', restApiRouter);
-
-    app.get('*', isLoggedIn("/auth/login"), function(req, res, next) {
-        res.render('index', { });
-    });
 };

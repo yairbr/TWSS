@@ -1,15 +1,22 @@
-module.exports = function(io){
+function authenticated(req, res, next){
+    if (req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/auth/login");
+}
+
+module.exports = function(){
 
     var express = require('express');
     var router = express.Router();
-    var recommendationEngine = require('../config/recommendationEngine')('127.0.0.1', 5000);
+    var recommendationEngine = require('../config/recommendationEngine');
     var Debrief = require('../models/debrief');
     var mongoose = require('mongoose');
     var async = require('async');
 
 
 
-    router.post('/recommend/title', function(req, res, next) {
+    router.post('/recommend/title', authenticated, function(req, res, next) {
         var recommendReq = {
             "messageId" : "1", //TODO: should be deprecated
             "req_type" : "TITLE",
@@ -51,7 +58,7 @@ module.exports = function(io){
 
     });
 
-    router.post('/recommend/what', function(req, res, next) {
+    router.post('/recommend/what', authenticated, function(req, res) {
         var recommendReq = {
             "messageId" : "1", //TODO: should be deprecated
             "req_type" : "WHAT",
@@ -67,7 +74,7 @@ module.exports = function(io){
                     var debriefIdsAndTitles = [];
                     debriefIds.forEach(function(id, idx){debriefIds[idx] = mongoose.Types.ObjectId(id);});
 
-                    Debrief.find({'_id' : {'$in' : debriefIds}},{'_id':1, '_what._data':1}).exec(function (err, debriefs){
+                    Debrief.find({'_id' : {'$in' : debriefIds}},{'_id':1, '_title._data':1}).exec(function (err, debriefs){
                         if(err){
                             res.status(404).json({
                                 message: 'Server Failed (debrief not found)'
@@ -75,9 +82,9 @@ module.exports = function(io){
                         } else {
                             debriefs.forEach(function(deb){
                                 var newItem = {what: "", id:""};
-                                var what = deb._what._data;
+                                var title = deb._title._data;
                                 var id = deb._id;
-                                newItem.what = what;
+                                newItem.title = title;
                                 newItem.id = id;
                                 debriefIdsAndTitles.push(newItem);
                             });
@@ -93,7 +100,7 @@ module.exports = function(io){
 
     });
 
-    router.post('/add_debrief', function(req, res, next) {
+    router.post('/add_debrief', authenticated, function(req, res) {
         // console.log('GOT REQUEST');
         var title = req.body.title;
         var what = req.body.what;

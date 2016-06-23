@@ -9,8 +9,8 @@ module.exports = function(passport, isLoggedIn){
       res.redirect('/auth/login');
     });
 
-    /* ADMIN DASHBOARD */
-    router.get('/', isLoggedIn, function(req, res, next) {
+    /* MAIN DASHBOARD */
+    router.get('/', isLoggedIn, function(req, res) {
       res.render('index', {  });
     });
 

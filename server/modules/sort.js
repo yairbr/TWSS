@@ -2,6 +2,8 @@ module.exports = function() {
 
 	var Debrief = require('../models/debrief');
 	var User = require('../models/user');
+	var mongoose = require('mongoose');
+
 
 	var calc_score = function (score_obj) {
 		if (!score_obj.rating || score_obj.rating == 0)
@@ -17,25 +19,41 @@ module.exports = function() {
 	return {
 		sort : function (msg) {
 			var type = "_" + msg.type + "s";
-			var debId = msg.id;
+			var debId = mongoose.Types.ObjectId(msg.id);
 
+			var deb = {};
 
-			var deb;
-			Debrief.findOne({'_id': debId}, '_ranking ' + type, function (data) {
-				if (err) {
-					res.status(404).json({
-						message: 'Server Failed (debrief not found)'
-					});
+			Debrief.findOne( {'_id' : debId}, type , function (err, data){
+				if(data){
+
+					console.log("retriev elements for sort : " + data);
+					deb = data;
 				} else {
-					deb = data
+					console.log ('error retrieving debrief');
 				}
+
 			});
 
-			var users = [];
-			type_arr.forEach(function (element) {
-				users.push(element._user);
+			var ans = [];
+			deb[type].forEach(function (element) {
+				ans.push(element._data);
 			});
 
+/*
+
+			Debrief.findOne( {'_id' : debId}, type +  ' _ranking', function (err, data){
+				if(data){
+
+					console.log("retriev elements for sort : " + data);
+					deb = data;
+				} else {
+					console.log ('error retrieving debrief');
+				}
+
+			});
+
+
+			var users = deb._ranking.keys();
 			User.find({'_id': {'$in': users}}, {'_id': 1, '_rating': 1}).exec(function (err, data) {
 				if (err) {
 					res.status(404).json({
@@ -50,7 +68,7 @@ module.exports = function() {
 			var objs = [];
 			elements.forEach(function (element) {
 				var username = element._user;
-				var obj;
+				var obj = {};
 				obj.data = element._data;
 				obj.scoring = element._score
 				obj.ranking = deb._ranking[username];
@@ -66,7 +84,8 @@ module.exports = function() {
 			objs.forEach(function (element) {
 				ans.push(element.data);
 			});
-
+*/
+			console.log(ans);
 			return ans;
 		}
 	};

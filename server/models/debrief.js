@@ -36,6 +36,7 @@ var debriefScheme = mongoose.Schema({
 			_tags : [ String ],
 			_score : Number
 		}],
+	_groups : [String],
 	_ranking : mongoose.Schema.Types.Mixed
 });
 
