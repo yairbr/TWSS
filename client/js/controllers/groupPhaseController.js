@@ -8,11 +8,6 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
 
     $scope.learnings = [];
 
-
-
-    Socket.connect();
-
-
     $scope.sendFactElement = function(){
         var type = "fact";
         var factToSend = $scope.fact;
@@ -26,6 +21,18 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
             Socket.emit('add-element', factData);
         }
     };
+    
+    $scope.voteFactElement = function(idx){
+        var data = {
+            type : "fact",
+            debId: debId,
+            idx : idx
+        };
+        Socket.emit('vote', data);
+    };
+
+
+    Socket.connect();
 
     Socket.on("connect", function(){
         console.log("emitting create room");
@@ -33,16 +40,12 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
     });
     
     Socket.on("elements-refresh", function(elements){
-        $scope.facts = elements.facts;
+        $scope.facts = elements.fact;
     });
 
-    Socket.on("fact-element-added", function(facts){
+    Socket.on("fact-elements-added", function(facts){
         console.log("receiving facts - " + facts);
         $scope.facts = facts;
-    });
-
-    Socket.on('facts-update-view', function(data){
-        $scope.facts = data;
     });
 
     $scope.$on('$locationChangeStart', function(event){

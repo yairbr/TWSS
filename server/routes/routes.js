@@ -82,8 +82,17 @@ module.exports = function(app, passport, io){
                     var debId = element.debId;
                     types[type].push(elementToAdd);
                     console.log('new ' + type + ' data is: ' + types[type].toString());
-                    io.to(debId).emit(type + '-element-added', types[type]);
+                    io.to(debId).emit(type + '-elements-added', types[type]);
                 }
+            });
+
+            socket.on('vote', function(data) {
+                var type = data.type;
+                var debId = data.debId;
+                var idx = data.idx;
+                var element = types[type][idx];
+                element.score++;
+                io.to(debId).emit(type + '-elements-added', types[type]);
             });
 
             socket.on('disconnect', function(){
