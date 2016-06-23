@@ -22,18 +22,50 @@
         <div class="form-group">
             <label>Title</label>
             <input class="form-control" ng-model="titleContext.title" space-hit-counter-title="sendTitle()" ng-blur="sendTitle()" placeholder="Debrief Title">
-            <label>Group</label>
-            <input class="form-control" ng-model="titleContext.groups">
-            <label>Categories</label>
-            <input class="form-control">
         </div>
     </div>
+
+    <div class="row">
+        <div>
+            <label>Groups.</label> <small> Choose the groups that relevant for your debrief: </small>
+            <!--<input class="form-control" ng-model="titleContext.groups">-->
+
+            <select multiple class="form-control" name="groupSelect" id="groupSelect" ng-model="selectedGroups">
+                <option ng-repeat="group in groups">{{group}}</option>
+            </select>
+
+            <p></p>
+            <button type="button" class="btn btn-primary btn-xs" ng-click="generateUsers()">Rank Users</button>
+            <p></p>
+
+            <ul style="width:8%">
+                <li ng-repeat="user in generatedUsers">
+                    {{user.user}}
+                    <select class="form-control" ng-model="user.rank">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </li>
+            </ul>
+
+
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <label>Categories</label>
+        <input class="form-control">
+    </div>
+
 
     <!--groups:{{titleContext.groups}}-->
 
     <div class="row">
         <label ng-if="titleContext.recommendations.length > 0">Similar Debriefs</label>
-        <div ng-repeat="recommendedDebrief in titleContext.recommendations">              
+        <div ng-repeat="recommendedDebrief in titleContext.recommendations">
             <!-- <a class="tag" ng-href='/debrief/view/{{recommendedDebrief.id}}' my-target> {{recommendedDebrief.title}} </a> -->
             <a href="" class="tag" ng-click='redirectToDebrief(recommendedDebrief.id)'> {{recommendedDebrief.title}} </a>
         </div>
@@ -43,17 +75,17 @@
         <div class="form-group">
             <label ng-if="titleContext.tags.length > 0">Tags</label>
             <ul class="tags">
-              <li><label class="tag" ng-repeat="tag in titleContext.tags">{{tag}}</label></li>
+                <li><label class="tag" ng-repeat="tag in titleContext.tags">{{tag}}</label></li>
             </ul>
         </div>
     </div>
-    
+
     <div class="row">
 
-        <div class="col-lg-12">     
+        <div class="col-lg-12">
             <a href="/dashboard" class="btn btn-primary btn-lg" role="button">Cancel</a>
             <a ng-click="whatHappened()" class="btn btn-success btn-lg" role="button" style="float:right">What Happened &raquo; </a>
         </div>
     </div>
-                
+
 </form>

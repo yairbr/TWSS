@@ -11,6 +11,7 @@ module.exports = function(){
     var router = express.Router();
     var recommendationEngine = require('../config/recommendationEngine');
     var Debrief = require('../models/debrief');
+    var Group = require('../models/group');
     var mongoose = require('mongoose');
     var async = require('async');
 
@@ -142,6 +143,57 @@ module.exports = function(){
         });
 
     });
+
+    router.get('/debrief/groups/init', authenticated, function(req, res){
+        console.log('got groups request!');
+        var res_groups = [];
+        Group.find({}, '_id',function(err, groups){
+            groups.forEach(function(group){
+                res_groups.push(group._id);
+            });
+            var data = {
+                groups: res_groups
+            };
+            
+            if (err)
+                console.log('ERROR');
+            console.log('returning result: ' + JSON.stringify(data));
+            res.json(data);
+        });
+    });
+
+    router.post('/debrief/groups/users', authenticated, function(req, res){
+        console.log('************************');
+        Group.find({'_id' : {'$in' : req.body.groups} },function(err, usersLists){
+            if (err){
+                console.log('GET USERS ERROR');
+                res.json(err);
+            }
+            var users = [];
+
+            if(usersLists) {
+                usersLists.forEach(function (userList) {
+                    if (userList) {
+                        console.log("first" + userList.toString());
+                        userList.users.forEach(function (user) {
+                            console.log(JSON.stringify(user));
+                            if (users.indexOf(user) === -1) {
+                                users.push(user);
+                            }
+                        });
+                    }
+                });
+            }
+            console.log('sending back: '+ users.toString());
+            var data = {
+                users: users
+            };
+            res.json(data);
+        });
+
+    });
+
+
 
     return router;
 

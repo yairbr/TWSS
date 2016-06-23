@@ -39,6 +39,20 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
             return JSON.parse($cookies.get(cookieName));
         }
 
+        $scope.selectedGroups = [];
+        $scope.generatedUsers = [];
+
+        $http({
+            method:'GET',
+            url: '/api/debrief/groups/init'
+        })
+            .success(function(data){
+                $scope.groups = data.groups;
+            })
+            .error(function(err, status){
+                console.log(err.status);
+            });
+
         $scope.whatSpaceCounter = 0;
         $scope.titleContext = {
             title: "",
@@ -125,7 +139,8 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
             var debrief = {
                 title:readJSONCookie('titleContext').title,
                 groups: readJSONCookie('titleContext').groups,
-                what: $scope.whatContext.what
+                what: $scope.whatContext.what,
+                users: $scope.generatedUsers
             };
             debriefService.publish(debrief);
         };
@@ -134,6 +149,30 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
             var landingUrl = "http://" + $window.location.host + "/debrief/view/" + debId;
             $window.open(landingUrl, '_blank');
         };
+
+        $scope.generateUsers = function(){
+            console.log('*/*/*/*/**/*/*/*');
+            console.log(JSON.stringify($scope.groups));
+            $http({
+                method:'POST',
+                url: '/api/debrief/groups/users',
+                data: {groups: $scope.selectedGroups}
+            })
+                .success(function(data){
+                    
+                    data.users.forEach(function(user){
+                        var generatedUser = {
+                            user: user,
+                            rank: 1
+                        };
+                        $scope.generatedUsers.push(generatedUser)
+                    });
+                })
+                .error(function(err){
+                    console.log(err.status);
+                });
+
+        }
     }]);
 
 twssApp.run( function($rootScope, $location, $cookies) {
