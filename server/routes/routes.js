@@ -136,6 +136,7 @@ module.exports = function(app, passport, io){
                     console.log('user ' + user + ' is already connected!');
                     socket.join(debId);
                     io.to(debId).emit('elements-refresh', rooms[debId].types);
+                    io.to(debId).emit('start-' + rooms[debId].phase + '-phase');
                 }
             });
 
@@ -184,14 +185,55 @@ module.exports = function(app, passport, io){
                 io.to(debId).emit(type + '-elements-added', sortedArray);
             });
 
-            socket.on('next-phase', function(data){
-                var debId = data.debId;
-                rooms[debId].phase = goToNextPhase(rooms[debId].phase );
-                io.to(debId).emit('start-' + rooms[debId].phase + '-phase', rooms[debId].phase);
+            socket.on('next-phase', function(debId){
+                rooms[debId].phase = goToNextPhase(rooms[debId].phase);
+                io.to(debId).emit('start-' + rooms[debId].phase + '-phase');
             });
 
             socket.on('disconnect', function(){
                 console.log('user ' + user + ' has disconnected!');
+            });
+
+            socket.on('finish', function(debId){
+                var room = rooms[debId];
+                var facts = room.types.fact;
+                var whys = room.types.why;
+                var learnings = room.types.learning;
+
+                var cleanData = function(element) {
+                    element._scoring = element.score;
+                    delete element['score'];
+                    element._user = element.user;
+                    delete element['user'];
+                    element._data = element.data;
+                    delete element['user'];
+                    delete element['rank'];
+                    delete element['rating'];
+                }
+
+                facts.forEach(cleanData);
+                whys.forEach(cleanData);
+                learnings.forEach(cleanData);
+
+                var ranks = {};
+                room.users.forEach(function (user){
+                   ranks[user.user] = user.rank;
+                });
+
+                Debrief.update({'_id' : debId}, {$set: { '_facts': facts,
+                                                         '_whys': whys,
+                                                         '_learnings' : learnings,
+                                                         '_ranking' : ranks }}, {'upsert': true},
+                                function(err){
+                                        if(err){
+                                            console.log("Some error occured updating debrief : " + debId );
+                                        }
+                });
+                console.log("this is updated object " + debId);
+                //TODO: the boweser blocks the popup for the last debrief
+                io.to(debId).emit('finished', debId);
+                io.to(debId).emit('back-to-dashboard');
+                delete rooms[debId];
             });
         }
         else{

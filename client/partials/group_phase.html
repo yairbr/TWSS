@@ -41,7 +41,7 @@
 			<div class="form-group">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+						<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Share your thoughts!</h3>
 					</div>
 					<div class="panel-body">
 						<div class="list-group">
@@ -62,7 +62,7 @@
 			</div>
 		</form>
 
-        <button type="button" class="btn btn-primary btn-xs" style="float:right" ng-click="changeState()">Next Phase </button>
+        <button type="button" class="btn btn-primary btn-xs" style="float:right" ng-click="nextPhase()">Next Phase </button>
 
 	</div>
 
@@ -70,15 +70,15 @@
 
     <div class="jumbotron" ng-show="stateEnum === 'why'">
         <form role="form">
-            <h2>Facts </h2>
+            <h2>Causes </h2>
             <div class="form-group">
-                <label>Facts the lead the occasion </label>
+                <label>Why did the occasion happen? </label>
                 <div>
                     <div class="col-lg-11"  style="padding-left : 0">
-                        <input class="form-control"  placeholder="Enter fact here ..." ng-model="why">
+                        <input class="form-control"  placeholder="Enter cause here ..." ng-model="why">
                     </div>
                     <div class="col-lg-1">
-                        <button type="button" class="btn btn-s btn-default" ng-click=" sendWhyElement()">Add</button>
+                        <button type="button" class="btn btn-s btn-default" ng-click="sendWhyElement()">Add</button>
                     </div>
                     <p>
                         <br>
@@ -89,7 +89,7 @@
             <div class="form-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i>Share your thoughts!</h3>
                     </div>
                     <div class="panel-body">
                         <div class="list-group">
@@ -109,19 +109,22 @@
                 </div>
             </div>
         </form>
+
+        <button type="button" class="btn btn-primary btn-xs" style="float:right" ng-click="nextPhase()">Next Phase </button>
+
     </div>
 
     <div class="jumbotron" ng-show="stateEnum === 'learning'">
         <form role="form">
-            <h2>Facts </h2>
+            <h2>Learnings </h2>
             <div class="form-group">
-                <label>Facts the lead the occasion </label>
+                <label>What have you learned? </label>
                 <div>
                     <div class="col-lg-11"  style="padding-left : 0">
-                        <input class="form-control"  placeholder="Enter fact here ..." ng-model="fact">
+                        <input class="form-control"  placeholder="Enter learning here ..." ng-model="learning">
                     </div>
                     <div class="col-lg-1">
-                        <button type="button" class="btn btn-s btn-default" ng-click=" sendFactElement()">Add</button>
+                        <button type="button" class="btn btn-s btn-default" ng-click="sendLearningElement()">Add</button>
                     </div>
                     <p>
                         <br>
@@ -132,19 +135,19 @@
             <div class="form-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Share your thoughts!</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="list-group">
+                        <div class="list-group" style="word-break: break-all;">
 
                             <!-- An itme -->
-                            <a class="list-group-item" ng-repeat="fact in facts">
-                                <span class="badge">{{fact.score}} Votes</span>
+                            <a class="list-group-item" ng-repeat="learning in learnings">
+                                <span class="badge">{{learning.score}} Votes</span>
                                 <button style=" background:none;
                                                 border:none;
                                                 font-size:1.2em;
-                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="voteFactElement($index)"> </button>
-                                <i class="fa fa-fw fa-user"> </i> <b> {{fact.user}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{fact.data}}
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="voteLearningElement($index)"> </button>
+                                <i class="fa fa-fw fa-user"> </i> <b> {{learning.user}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{learning.data}}
                             </a>
 
                         </div>
@@ -152,6 +155,10 @@
                 </div>
             </div>
         </form>
+
+        <button type="button" class="btn btn-success btn-lg" style="float:right" ng-click="finishDebrief()">FINISH </button>
+        <br>
+
     </div>
 
 

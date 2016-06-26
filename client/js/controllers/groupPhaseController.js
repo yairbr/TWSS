@@ -1,4 +1,4 @@
-twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Socket', '$cookies', function($scope, $http, $location, Socket, $cookies){
+twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Socket', '$cookies','$window', function($scope, $http, $location, Socket, $cookies,$window){
     var path = $location.path();
     var debId = path.split('/')[3];
     //console.log(debId);
@@ -30,6 +30,43 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
         }
     };
 
+    $scope.sendLearningElement = function(){
+        console.log('sending learning element');
+        var type = "learning";
+        var learningToSend = $scope.learning;
+        console.log($scope.learning);
+        if (learningToSend){
+            var learningData = {
+                type: type,
+                data: learningToSend,
+                debId: debId
+            };
+            console.log('emiting the learning: ' + learningData);
+            Socket.emit('add-element', learningData);
+        }
+    };
+
+    $scope.sendWhyElement = function(){
+        console.log('sending why element');
+        var type = "why";
+        var whyToSend = $scope.why;
+        console.log($scope.why);
+        if (whyToSend){
+            var whyData = {
+                type: type,
+                data: whyToSend,
+                debId: debId
+            };
+            console.log('emiting the why: ' + whyData);
+            Socket.emit('add-element', whyData);
+        }
+    };
+
+    $scope.nextPhase = function(){
+        console.log('emiting the next phase on IO server');
+        Socket.emit('next-phase', debId);
+    };
+
     $scope.voteFactElement = function(idx){
         var data = {
             type : "fact",
@@ -38,6 +75,35 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
         };
         Socket.emit('vote', data);
     };
+
+    $scope.voteWhyElement = function(idx){
+        var data = {
+            type : "why",
+            debId: debId,
+            idx : idx
+        };
+        Socket.emit('vote', data);
+    };
+
+    $scope.voteLearningElement = function(idx){
+        var data = {
+            type : "learning",
+            debId: debId,
+            idx : idx
+        };
+        Socket.emit('vote', data);
+    };
+
+
+    $scope.finishDebrief = function(){
+        Socket.emit('finish', debId);
+    };
+    
+    
+    
+    
+    
+    
 
     Socket.connect();
 
@@ -55,6 +121,8 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
 
     Socket.on("elements-refresh", function(elements){
         $scope.facts = elements.fact;
+        $scope.whys = elements.why;
+        $scope.learnings = elements.learning;
     });
 
     Socket.on("fact-elements-added", function(facts){
@@ -82,7 +150,20 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
         $scope.stateEnum = "learning";
     });
 
+    Socket.on('finished', function(debId){
+        console.log('finished!. opening the debrief!');
+        var debUrl = "http://" + $window.location.host + "/debrief/view/" + debId;
+        $window.open(debUrl, '_blank');
+    });
 
+    Socket.on('back-to-dashboard', function(){
+        console.log('finished!. back to dashboard guys~!!');
+        var landingUrl = "http://" + $window.location.host + "/dashboard";
+        $window.open(landingUrl, '_self');
+    });
+    
+    
+    
     $scope.$on('$locationChangeStart', function(event){
         Socket.disconnect(true);
     });
