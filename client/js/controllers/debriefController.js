@@ -40,7 +40,7 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         }
 
         $scope.selectedGroups = [];
-        $scope.generatedUsers = [];
+        $scope.groups = [];
 
         $http({
             method:'GET',
@@ -56,7 +56,7 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         $scope.whatSpaceCounter = 0;
         $scope.titleContext = {
             title: "",
-            groups:"",
+            generatedUsers:[],
             tags: [],
             recommendations: []
         };
@@ -138,9 +138,9 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
             console.log('publishing');
             var debrief = {
                 title:readJSONCookie('titleContext').title,
-                groups: readJSONCookie('titleContext').groups,
                 what: $scope.whatContext.what,
-                users: $scope.generatedUsers
+                users: $scope.titleContext.generatedUsers,
+                groups: $scope.selectedGroups
             };
             debriefService.publish(debrief);
         };
@@ -151,8 +151,7 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
         };
 
         $scope.generateUsers = function(){
-            console.log('*/*/*/*/**/*/*/*');
-            console.log(JSON.stringify($scope.groups));
+            $scope.titleContext.generatedUsers = [];
             $http({
                 method:'POST',
                 url: '/api/debrief/groups/users',
@@ -165,7 +164,7 @@ twssApp.controller('debriefController', ['$scope', '$http', '$cookies', '$window
                             user: user,
                             rank: 1
                         };
-                        $scope.generatedUsers.push(generatedUser)
+                        $scope.titleContext.generatedUsers.push(generatedUser)
                     });
                 })
                 .error(function(err){

@@ -19,7 +19,8 @@
 
 
 <div class="row">
-	<div class="jumbotron">
+
+	<div class="jumbotron" ng-show="stateEnum === 'fact'">
 		<form role="form">
 			<h2>Facts </h2>
 			<div class="form-group">
@@ -60,5 +61,98 @@
 				</div>
 			</div>
 		</form>
+
+        <button type="button" class="btn btn-primary btn-xs" style="float:right" ng-click="changeState()">Next Phase </button>
+
 	</div>
+
+
+
+    <div class="jumbotron" ng-show="stateEnum === 'why'">
+        <form role="form">
+            <h2>Facts </h2>
+            <div class="form-group">
+                <label>Facts the lead the occasion </label>
+                <div>
+                    <div class="col-lg-11"  style="padding-left : 0">
+                        <input class="form-control"  placeholder="Enter fact here ..." ng-model="why">
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="btn btn-s btn-default" ng-click=" sendWhyElement()">Add</button>
+                    </div>
+                    <p>
+                        <br>
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+
+                            <!-- An itme -->
+                            <a class="list-group-item" ng-repeat="why in whys">
+                                <span class="badge">{{why.score}} Votes</span>
+                                <button style=" background:none;
+                                                border:none;
+                                                font-size:1.2em;
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="voteWhyElement($index)"> </button>
+                                <i class="fa fa-fw fa-user"> </i> <b> {{why.user}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{why.data}}
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="jumbotron" ng-show="stateEnum === 'learning'">
+        <form role="form">
+            <h2>Facts </h2>
+            <div class="form-group">
+                <label>Facts the lead the occasion </label>
+                <div>
+                    <div class="col-lg-11"  style="padding-left : 0">
+                        <input class="form-control"  placeholder="Enter fact here ..." ng-model="fact">
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="btn btn-s btn-default" ng-click=" sendFactElement()">Add</button>
+                    </div>
+                    <p>
+                        <br>
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+
+                            <!-- An itme -->
+                            <a class="list-group-item" ng-repeat="fact in facts">
+                                <span class="badge">{{fact.score}} Votes</span>
+                                <button style=" background:none;
+                                                border:none;
+                                                font-size:1.2em;
+                                                color:gray;" class="glyphicon glyphicon-circle-arrow-up badge" ng-click="voteFactElement($index)"> </button>
+                                <i class="fa fa-fw fa-user"> </i> <b> {{fact.user}} &nbsp;&nbsp;&nbsp;&nbsp;</b>{{fact.data}}
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
 </div>

@@ -39,17 +39,12 @@
             <p></p>
 
             <ul style="width:8%">
-                <li ng-repeat="user in generatedUsers">
+                <li ng-repeat="user in titleContext.generatedUsers">
                     {{user.user}}
-                    <select class="form-control" ng-model="user.rank">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
+                    <select class="form-control" ng-model="user.rank" ng-options="rank for rank in [1,2,3]" ng-init="user.rank=1">
                     </select>
                 </li>
             </ul>
-
-
 
 
         </div>

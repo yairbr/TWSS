@@ -107,6 +107,8 @@ module.exports = function(){
         var what = req.body.what;
         var userId = req.user._id;
         var groups = req.body.groups;
+        
+        var users = req.body.users;
 
         var deb = new Debrief({
             "_cluster" : 0,
@@ -136,9 +138,11 @@ module.exports = function(){
                 res.json(err);
             }
             else {
-                // console.log('new Debrief saved:');
-                // console.log(newDebrief);
-                res.json(newDebrief);
+                var response = {
+                    deb_id: newDebrief._id,
+                    users: users
+                };
+                res.json(response);
             }
         });
 

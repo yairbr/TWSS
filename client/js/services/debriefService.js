@@ -1,22 +1,17 @@
 twssApp.factory('debriefService', ['$http','$cookies','$location', function($http, $cookies,$location){
     return {
         publish: function(debrief){
-            var groupsArr = debrief.groups.split(',');
-            var reqData = {
-                title : debrief.title,
-                groups: groupsArr,
-                what : debrief.what
-            };
-
             $http({
                 method:'POST',
                 url: '/api/add_debrief',
-                data: reqData
+                data: debrief
             })
-                .success(function(newDebrief){
-                    var newDebId = newDebrief._id;
+                .success(function(respData){
+                    var newDebId = respData.deb_id;
+                    var users = respData.users;
                     $cookies.remove('titleContext');
                     $cookies.remove('whatContext');
+                    $cookies.put('users', JSON.stringify(users));
                     $location.path('/debrief/group_phase/' + newDebId);
                 })
                 .error(function(err, status){
