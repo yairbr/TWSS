@@ -111,6 +111,7 @@ module.exports = function(){
 
         var users = req.body.users;
 
+
         var deb = new Debrief({
             "_cluster" : 0,
             "_title" :
@@ -143,6 +144,16 @@ module.exports = function(){
                     deb_id: newDebrief._id,
                     users: users
                 };
+
+                var debId = newDebrief._id;
+                var usernames = users.map(function(u) {return u.user;});
+                var notifications = {};
+                notifications['_notifications.' + debId] = newDebrief._title;
+                User.update({'_id' : {'$in' : usernames }}, {$set : notifications }, {'upsert': true, multi: true}, function(err){
+                    if(err){
+                        console.log("Some error occured updating debrief : " + debId );
+                    }
+                });
                 res.json(response);
             }
         });
@@ -207,19 +218,49 @@ module.exports = function(){
                 console.log('ERRORR in retrieving finished debriefs for the user ' + user);
                 res.json(err);
             }
-            var objData = JSON.parse(JSON.stringify(data._publishedDebriefs));
+            var datum = [];
+            if (data._publishedDebriefs){
+                var objData = JSON.parse(JSON.stringify(data._publishedDebriefs));
+                Object.keys(objData).forEach(function(id){
+                    var obj ={};
+                    obj.id = id;
+                    obj.user = data._publishedDebriefs[id]._user;
+                    obj.title = data._publishedDebriefs[id]._data;
+                    datum.push(obj);
+                });
+            }
+
+            console.log('found: ' + datum.toString());
+            res.json(datum);
+        });
+
+    });
+
+    router.get('/dashboard/notifications', authenticated, function(req, res){
+        var user = req.session.passport.user;
+        console.log('***********');
+        console.log(user);
+        User.findOne({'_id' : user}, {'_notifications': 1}, function(err, data){
+            if (err){
+                console.log('ERRORR in retrieving notifications for the user ' + user);
+                res.json(err);
+            }
 
             var datum = [];
-            Object.keys(objData).forEach(function(id){
-                var obj ={};
-                obj.id = id;
-                obj.user = data._publishedDebriefs[id]._user;
-                obj.title = data._publishedDebriefs[id]._data;
-                datum.push(obj);
-            });
+
+            if (data._notifications){
+                var objData = JSON.parse(JSON.stringify(data._notifications));
 
 
-
+                Object.keys(objData).forEach(function(id){
+                    var obj ={};
+                    obj.id = id;
+                    obj.user = data._notifications[id]._user;
+                    obj.title = data._notifications[id]._data;
+                    datum.push(obj);
+                });
+            }
+            
             console.log('found: ' + datum.toString());
             res.json(datum);
         });

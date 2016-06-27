@@ -244,8 +244,18 @@ module.exports = function(app, passport, io){
                             User.update({'_id' : {'$in' : usernames }}, {$set : published }, {'upsert': true, multi: true}, function(err){
                                 if(err){
                                     console.log("Some error occured updating debrief : " + debId );
+                                } else{
+                                    var notifications = {};
+                                    notifications['_notifications.' + debId] = 1;
+                                    User.update({'_id' : {'$in' : usernames }}, {$unset : notifications }, {'upsert': true, multi: true}, function(err){
+                                        if(err){
+                                            console.log("Some error occured updating debrief : " + debId );
+                                        }
+                                    });
                                 }
                             });
+
+
                         }
                     });
 

@@ -13,7 +13,8 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Notification CSS -->
+    <link rel="stylesheet" href="/libs/angular-notification-icons/angular-notification-icons.min.css">
     <!-- Custom CSS -->
     <link href="/resources/css/sb-admin.css" rel="stylesheet">
     <link href="/resources/css/tags-style.css" rel="stylesheet">  
@@ -29,9 +30,9 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
       <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-          <![endif]-->
+          <!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+          <!--<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
+          <!--<![endif]&ndash;&gt;-->
 
   </head>
 
@@ -56,7 +57,11 @@
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!--<notification-icon count="finishedDebriefs.length" animation="grow">-->
+                <i class="fa fa-envelope"></i> <b class="caret"></b>
+              <!--</notification-icon>-->
+            </a>
             <ul class="dropdown-menu message-dropdown">
 
               <li class="message-preview" ng-repeat="finishedDebrief in finishedDebriefs">
@@ -107,6 +112,8 @@
                 <!--</a>-->
               <!--</li>-->
 
+
+
               <li class="message-footer">
                 <a href="#">Read All New Messages</a>
               </li>
@@ -115,25 +122,9 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
             <ul class="dropdown-menu alert-dropdown">
-              <li>
-                <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+              <li ng-repeat="notification in notifications">
+                <a href="" ng-click="redirectToNotifiedDebrief(notification.id)">{{notification.title}} <span class="label label-default">{{notification.user}}</span></a>
               </li>
-              <li>
-                <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-              </li>
-              <li>
-                <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-              </li>
-              <li>
-                <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-              </li>
-              <li>
-                <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-              </li>
-              <li>
-                <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-              </li>
-              <li class="divider"></li>
               <li>
                 <a href="#">View All</a>
               </li>
@@ -153,7 +144,7 @@
               </li>
               <li class="divider"></li>
               <li>
-                <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                <a href="/auth/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
               </li>
             </ul>
           </li>
@@ -217,7 +208,8 @@
     <script type="text/javascript" src="/js/controllers/debriefController.js"></script>
     <script type="text/javascript" src="/js/controllers/groupPhaseController.js"></script>
 
-
+    <script type="text/javascript" src="/libs/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="/libs/angular-notification-icons/angular-notification-icons.js"></script>
 
 
 

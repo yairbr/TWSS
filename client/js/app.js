@@ -1,5 +1,5 @@
 var twssApp = angular.module('twssApp', [
-	'ngRoute', 'ngCookies', 'btford.socket-io'])
+	'ngRoute', 'ngCookies', 'btford.socket-io','angular-notification-icons', 'ngAnimate'])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/home.html', controller: 'homeController'});

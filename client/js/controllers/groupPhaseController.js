@@ -108,10 +108,14 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
     Socket.connect();
 
     Socket.on("connect", function(){
+        var users;
         console.log("emitting create room");
-        var users = JSON.parse($cookies.get('users'));
+        if ($cookies.get('users')){
+            users = JSON.parse($cookies.get('users'));
+        }
         console.log('********************/////////////////////************%%%%%%%%%%%%%5');
         console.log(users);
+        // var users = JSON.parse($cookies.get('users'));
         var joinRoomData = {
             debId: debId,
             users: users

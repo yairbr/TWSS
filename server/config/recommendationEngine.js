@@ -1,7 +1,7 @@
 var q = require('q');
 var net = require('net');
 
-var RECOMMENDATION_HOST = '132.73.193.89';
+var RECOMMENDATION_HOST = '127.0.0.1';
 var RECOMMENDATION_PORT = 5000;
 
 module.exports = {
@@ -112,93 +112,4 @@ M::::::M               M::::::Mi::::::il::::::l         v:::v            uu:::::
 MMMMMMMM               MMMMMMMMiiiiiiiillllllll          vvv               uuuuuuuu  uuuu  sssssssssss        
                                                                                                               
                                                                                                               
-
-
-
 */
-
-
-/*
-
-var get_title_recommendations = function ( nMessageId, nUserId, nText, nTags){
-	get_recommendations('TITLE', nMessageId, nUserId, nText, nTags);
-}
-
-var get_what_recommendations = function ( nMessageId, nUserId, nText, nTags){
-	get_recommendations('WHAT', nMessageId, nUserId, nText, nTags);
-}
-
-
-var get_recommendations = function(req_type, nMessageId, nUserId, nText, nTags){
-	var promise =
-
-	var client = new net.Socket();
-	client.connect(PORT, HOST, function() {
-
-		console.log('CONNECTED TO: ' + HOST + ':' + PORT);
-
-		var tags = '';
-		for(var i = 0; i < nTags.length; i++){
-			tags = tags + nTags[i] + ',';
-		}
-
-		if(tags.length > 0){
-			tags = tags.substring(0, tags.length - 1);	
-		}
-		
-		console.log(tags);
-
-    	// Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
-    	var req = req_type + '_REC_REQ\nMessageId: ' + nMessageId + '\nUserId: ' + nUserId + '\nText:' + nText + '\nTags:' + tags + '\n@\n';
-    	console.log(req);
-
-    	client.write(req);
-
-	});
-
-
-	// Add a 'data' event handler for the client socket
-	// data is what the server sent to this socket
-	client.on('data', function(data) {
-
-		var answer = JSON.parse(data);
-    	// Close the client socket completely
-
-    	// TODO - there can be security problems because we openning and closing connections in each request
-    	// thus, main server can block the request from that source considering this requests as flooding attack.
-
-    	client.destroy();
-    	console.log("debriefs : " + answer['debriefs']);
-	});
-
-	// Add a 'close' event handler for the client socket
-	client.on('close', function() {
-		console.log('Connection closed');
-	});
-
-	function(){
-
-
-	}();
-}
-
-get_title_recommendations(1,123,'Damaged hardware due to extreme heat', ['david', 'itzik'])
-
-*/
-
-
-
-	/*
-	var kaki = function(one, callback){
-		callback(50);
-	}
-
-	kaki(1, function(returnedNumber){
-		if(returnedNumber){
-			console("YAY");
-		}
-	});
-
-
-
-	*/
