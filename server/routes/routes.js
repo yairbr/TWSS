@@ -94,7 +94,7 @@ module.exports = function(app, passport, io){
     io.on('connection', function(socket){
         if (socket.request.session.passport) {
             var user = socket.request.session.passport.user;
-            
+
             socket.on('join-to-room', function(joinRoomData) {
                 var room = {
                     users : [],
@@ -141,7 +141,6 @@ module.exports = function(app, passport, io){
             });
 
             socket.on('add-element', function(element) {
-                console.log('ADDD ELEMEENTNNTNTT');
                 console.log(JSON.stringify(element));
                 console.log(rooms[element.debId]);
                 console.log('****************************');
@@ -209,7 +208,7 @@ module.exports = function(app, passport, io){
                     delete element['user'];
                     delete element['rank'];
                     delete element['rating'];
-                }
+                };
 
                 facts.forEach(cleanData);
                 whys.forEach(cleanData);
@@ -217,23 +216,39 @@ module.exports = function(app, passport, io){
 
                 var ranks = {};
                 room.users.forEach(function (user){
-                   ranks[user.user] = user.rank;
+                    ranks[user.user] = user.rank;
                 });
 
-                Debrief.update({'_id' : debId}, {$set: { '_facts': facts,
-                                                         '_whys': whys,
-                                                         '_learnings' : learnings,
-                                                         '_ranking' : ranks }}, {'upsert': true},
-                                function(err){
-                                        if(err){
-                                            console.log("Some error occured updating debrief : " + debId );
-                                        }
-                });
-                console.log("this is updated object " + debId);
-                //TODO: the boweser blocks the popup for the last debrief
-                io.to(debId).emit('finished', debId);
-                io.to(debId).emit('back-to-dashboard');
-                delete rooms[debId];
+                Debrief.findOneAndUpdate({'_id' : debId}, {$set: { '_facts': facts,
+                        '_whys': whys,
+                        '_learnings' : learnings,
+                        '_ranking' : ranks }}, {'upsert': true},
+                    function(err, data){
+                        if(err){
+                            console.log("Some error occured updating debrief : " + debId );
+                        }
+                        else{
+                            console.log("this is updated object " + debId);
+                            //TODO: the boweser blocks the popup for the last debrief
+                            io.to(debId).emit('finished', debId);
+                            io.to(debId).emit('back-to-dashboard');
+                            var usernames = rooms[debId].users.map(function(u) {return u.user;});
+                            console.log('********************************');
+                            console.log(usernames.toString());
+                            console.log(JSON.stringify(data._title));
+                            console.log('********************************');
+                            delete rooms[debId];
+
+                            var published = {};
+                            published['_publishedDebriefs.' + debId] = data._title;
+                            User.update({'_id' : {'$in' : usernames }}, {$set : published }, {'upsert': true, multi: true}, function(err){
+                                if(err){
+                                    console.log("Some error occured updating debrief : " + debId );
+                                }
+                            });
+                        }
+                    });
+
             });
         }
         else{

@@ -11,6 +11,7 @@ module.exports = function(){
     var router = express.Router();
     var recommendationEngine = require('../config/recommendationEngine');
     var Debrief = require('../models/debrief');
+    var User = require('../models/user');
     var Group = require('../models/group');
     var mongoose = require('mongoose');
     var async = require('async');
@@ -107,7 +108,7 @@ module.exports = function(){
         var what = req.body.what;
         var userId = req.user._id;
         var groups = req.body.groups;
-        
+
         var users = req.body.users;
 
         var deb = new Debrief({
@@ -158,7 +159,7 @@ module.exports = function(){
             var data = {
                 groups: res_groups
             };
-            
+
             if (err)
                 console.log('ERROR');
             console.log('returning result: ' + JSON.stringify(data));
@@ -197,7 +198,33 @@ module.exports = function(){
 
     });
 
+    router.get('/dashboard/finishedDebriefs', authenticated, function(req, res){
+        var user = req.session.passport.user;
+        console.log('***********');
+        console.log(user);
+        User.findOne({'_id' : user}, {'_publishedDebriefs': 1}, function(err, data){
+            if (err){
+                console.log('ERRORR in retrieving finished debriefs for the user ' + user);
+                res.json(err);
+            }
+            var objData = JSON.parse(JSON.stringify(data._publishedDebriefs));
 
+            var datum = [];
+            Object.keys(objData).forEach(function(id){
+                var obj ={};
+                obj.id = id;
+                obj.user = data._publishedDebriefs[id]._user;
+                obj.title = data._publishedDebriefs[id]._data;
+                datum.push(obj);
+            });
+
+
+
+            console.log('found: ' + datum.toString());
+            res.json(datum);
+        });
+
+    });
 
     return router;
 

@@ -37,10 +37,12 @@
 
   <body ng-app='twssApp'>
 
+
     <div id="wrapper" ng-controller="navController">
 
       <!-- Navigation -->
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -56,51 +58,55 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
             <ul class="dropdown-menu message-dropdown">
-              <li class="message-preview">
-                <a href="#">
+
+              <li class="message-preview" ng-repeat="finishedDebrief in finishedDebriefs">
+                <a href="" ng-click="redirectToFinishedDebrief(finishedDebrief.id)">
                   <div class="media">
                     <span class="pull-left">
                       <img class="media-object" src="http://placehold.it/50x50" alt="">
                     </span>
                     <div class="media-body">
-                      <h5 class="media-heading"><strong>John Smith</strong>
+                      <h5 class="media-heading"><strong>{{finishedDebrief.user}}</strong>
                       </h5>
                       <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                      <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                      <p>{{finishedDebrief.title}}</p>
                     </div>
                   </div>
                 </a>
               </li>
-              <li class="message-preview">
-                <a href="#">
-                  <div class="media">
-                    <span class="pull-left">
-                      <img class="media-object" src="http://placehold.it/50x50" alt="">
-                    </span>
-                    <div class="media-body">
-                      <h5 class="media-heading"><strong>John Smith</strong>
-                      </h5>
-                      <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                      <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="message-preview">
-                <a href="#">
-                  <div class="media">
-                    <span class="pull-left">
-                      <img class="media-object" src="http://placehold.it/50x50" alt="">
-                    </span>
-                    <div class="media-body">
-                      <h5 class="media-heading"><strong>John Smith</strong>
-                      </h5>
-                      <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                      <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                    </div>
-                  </div>
-                </a>
-              </li>
+
+              <!--<li class="message-preview">-->
+                <!--<a href="#">-->
+                  <!--<div class="media">-->
+                    <!--<span class="pull-left">-->
+                      <!--<img class="media-object" src="http://placehold.it/50x50" alt="">-->
+                    <!--</span>-->
+                    <!--<div class="media-body">-->
+                      <!--<h5 class="media-heading"><strong>John Smith</strong>-->
+                      <!--</h5>-->
+                      <!--<p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>-->
+                      <!--<p>Lorem ipsum dolor sit amet, consectetur...</p>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</a>-->
+              <!--</li>-->
+              <!---->
+              <!--<li class="message-preview">-->
+                <!--<a href="#">-->
+                  <!--<div class="media">-->
+                    <!--<span class="pull-left">-->
+                      <!--<img class="media-object" src="http://placehold.it/50x50" alt="">-->
+                    <!--</span>-->
+                    <!--<div class="media-body">-->
+                      <!--<h5 class="media-heading"><strong>John Smith</strong>-->
+                      <!--</h5>-->
+                      <!--<p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>-->
+                      <!--<p>Lorem ipsum dolor sit amet, consectetur...</p>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</a>-->
+              <!--</li>-->
+
               <li class="message-footer">
                 <a href="#">Read All New Messages</a>
               </li>
@@ -160,8 +166,8 @@
             </li>
             <li ng-class="{active: isActive('/debrief')}">
               <a href="/debrief/title"><i class="fa fa-fw fa-edit"></i> New Debrief</a>
-            </li ng-class="{active: isActive('/tasks')}">
-            <li>
+            </li>
+            <li ng-class="{active: isActive('/tasks')}">
               <a href="/tasks"><i class="fa fa-fw fa-bar-chart-o"></i> My Tasks</a>
             </li>
           </ul>

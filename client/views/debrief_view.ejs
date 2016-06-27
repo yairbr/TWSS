@@ -63,19 +63,21 @@
 
             <div class="row">
 				<div style="padding : 10px;">
-					<h2>Learnings </h2>
-					<label>What have we learnt? </label>
+					<h2>Facts </h2>
+					<label> </label>
 					<div class="form-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Group's feed </h3>
 							</div>
 							<div class="panel-body">
 								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<span class="badge">just now</span>
-										<i class="fa fa-fw fa-user"></i> Calendar updated
-									</a>
+									<% for (var i=0; i<deb._facts.length; i++){ %>
+										<a class="list-group-item">
+											<span class="badge"><%=deb._facts[i]._score %>Votes</span>
+											<i class="fa fa-fw fa-user"> </i> <b> <%=deb._facts[i]._user %> &nbsp;&nbsp;&nbsp;&nbsp;</b> <%=deb._facts[i]._data %>
+										</a>
+									<% } %>
 								</div>
 							</div>
 						</div>
@@ -85,19 +87,21 @@
 
 			<div class="row">
 				<div style="padding : 10px;">
-					<h2>Learnings </h2>
-					<label>What have we learnt? </label>
+					<h2>Causes </h2>
+					<label></label>
 					<div class="form-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Group's feed</h3>
 							</div>
 							<div class="panel-body">
 								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<span class="badge">just now</span>
-										<i class="fa fa-fw fa-user"></i> Calendar updated
+									<% for (var i=0; i<deb._whys.length; i++){ %>
+									<a class="list-group-item">
+										<span class="badge"><%=deb._whys[i]._score %>Votes</span>
+										<i class="fa fa-fw fa-user"> </i> <b> <%=deb._whys[i]._user %> &nbsp;&nbsp;&nbsp;&nbsp;</b> <%=deb._whys[i]._data %>
 									</a>
+									<% } %>
 								</div>
 							</div>
 						</div>
@@ -108,18 +112,20 @@
             <div class="row">
 				<div style="padding : 10px;">
 					<h2>Learnings </h2>
-					<label>What have we learnt? </label>
+					<label></label>
 					<div class="form-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Tasks Panel</h3>
+								<h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Group's feed</h3>
 							</div>
 							<div class="panel-body">
 								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<span class="badge">just now</span>
-										<i class="fa fa-fw fa-user"></i> Calendar updated
+									<% for (var i=0; i<deb._learnings.length; i++){ %>
+									<a class="list-group-item">
+										<span class="badge"><%=deb._learnings[i]._score %> Votes</span>
+										<i class="fa fa-fw fa-user"> </i> <b> <%=deb._learnings[i]._user %> &nbsp;&nbsp;&nbsp;&nbsp;</b> <%=deb._learnings[i]._data %>
 									</a>
+									<% } %>
 								</div>
 							</div>
 						</div>

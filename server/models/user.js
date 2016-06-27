@@ -18,6 +18,8 @@ var userScheme = mongoose.Schema({
 	_listAssigned : [ String ],
 	_listCreated : [ String ],
 	_quickLearning : String,
+	_publishedDebriefs : mongoose.Schema.Types.Mixed,
+	_notifications: mongoose.Schema.Types.Mixed
 });
 
 module.exports = mongoose.model('User', userScheme);
