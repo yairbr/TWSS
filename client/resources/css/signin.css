@@ -38,3 +38,9 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+/* Gil added this */
+body {
+  padding-top: 250px;
+  background-color: #2F8CAB;
+}

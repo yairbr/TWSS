@@ -1,8 +1,9 @@
 <div class="row" id="topRow">
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            New Debrief
+    <div class="col-lg-12" style = "margin-top: -20px">
+        <center><h1 class="page-header" style="color: #420911">
+            <b> New Debrief </b>
         </h1>
+        </center>
         <ol class="breadcrumb">
             <li>
                 <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
@@ -18,28 +19,31 @@
 
 <form role="form">
 
-    <div class="row">
+    <div class="row" style="margin-left: 1px; margin-right: 1px">
         <div class="form-group">
-            <label>Title</label>
+            <h2>Title</h2>
             <input class="form-control" ng-model="titleContext.title" space-hit-counter-title="sendTitle()" ng-blur="sendTitle()" placeholder="Debrief Title">
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-left: 1px; margin-right: 1px">
         <div>
-            <label>Groups.</label> <small> Choose the groups that relevant for your debrief: </small>
+            <img src="../resources/images/group.png" width="40" height="40" style="margin-bottom: 8px">
+            <label style="margin-bottom: -10px"><h3>Groups</h3></label>
+            <br>
+            <small> Choose the groups that relevant for your debrief: </small>
             <!--<input class="form-control" ng-model="titleContext.groups">-->
-
+            <br>
             <select multiple class="form-control" name="groupSelect" id="groupSelect" ng-model="selectedGroups">
                 <option ng-repeat="group in groups">{{group}}</option>
             </select>
-
+            <br>
             <p></p>
             <button type="button" class="btn btn-primary btn-xs" ng-click="generateUsers()">Rank Users</button>
             <p></p>
 
-            <ul style="width:8%">
-                <li ng-repeat="user in titleContext.generatedUsers">
+            <ul class="list-inline" >
+                <li ng-repeat="user in titleContext.generatedUsers" style= "padding-right: 0px">
                     {{user.user}}
                     <select class="form-control" ng-model="user.rank" ng-options="rank for rank in [1,2,3]" ng-init="user.rank=1">
                     </select>
@@ -49,12 +53,6 @@
 
         </div>
     </div>
-
-    <div class="row">
-        <label>Categories</label>
-        <input class="form-control">
-    </div>
-
 
     <!--groups:{{titleContext.groups}}-->
 
@@ -82,5 +80,5 @@
             <a ng-click="whatHappened()" class="btn btn-success btn-lg" role="button" style="float:right">What Happened &raquo; </a>
         </div>
     </div>
-
+<br>
 </form>
