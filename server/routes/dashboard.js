@@ -11,7 +11,10 @@ module.exports = function(passport, isLoggedIn){
 
     /* MAIN DASHBOARD */
     router.get('/', isLoggedIn, function(req, res) {
-      res.render('index', {  });
+        if (req.session.passport) {
+            // console.log('rendering...');
+            res.render('index', {user: req.session.passport});
+        }
     });
 
     return router;

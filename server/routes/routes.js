@@ -45,7 +45,10 @@ module.exports = function(app, passport, io){
     app.use('/api', restApiRouter);
 
     app.get('*', isLoggedIn("/auth/login"), function(req, res, next) {
-        res.render('index', { });
+        if (req.session.passport) {
+            // console.log('rendering...');
+            res.render('index', {user: req.session.passport});
+        }
     });
 
 
@@ -102,7 +105,8 @@ module.exports = function(app, passport, io){
                     types : {
                         fact:[],
                         why:[],
-                        learning:[]
+                        learning:[],
+                        title: "Debrief"
                     }
                 };
 
@@ -127,8 +131,12 @@ module.exports = function(app, passport, io){
                             rooms[debId] = room;
                             console.log('/*/***/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*');
                             console.log(JSON.stringify(rooms[debId]));
-                            socket.join(debId);
-                            io.to(debId).emit('elements-refresh', rooms[debId].types);
+                            Debrief.findOne({'_id' : debId}, function(err, deb){
+                                rooms[debId].types.title = deb._title._data;
+                                socket.join(debId);
+                                io.to(debId).emit('elements-refresh', rooms[debId].types);
+                            });
+                            
                         }
                     });
                 }

@@ -127,6 +127,8 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
         $scope.facts = elements.fact;
         $scope.whys = elements.why;
         $scope.learnings = elements.learning;
+        $scope.title = elements.title;
+        
     });
 
     Socket.on("fact-elements-added", function(facts){
