@@ -113,8 +113,8 @@ twssApp.controller('groupPhaseController', ['$scope', '$http','$location', 'Sock
         if ($cookies.get('users')){
             users = JSON.parse($cookies.get('users'));
         }
-        console.log('********************/////////////////////************%%%%%%%%%%%%%5');
-        console.log(users);
+        // console.log('********************/////////////////////************%%%%%%%%%%%%%5');
+        // console.log(users);
         // var users = JSON.parse($cookies.get('users'));
         var joinRoomData = {
             debId: debId,

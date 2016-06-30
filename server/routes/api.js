@@ -163,9 +163,12 @@ module.exports = function(){
     router.get('/debrief/groups/init', authenticated, function(req, res){
         console.log('got groups request!');
         var res_groups = [];
-        Group.find({}, '_id',function(err, groups){
+        Group.find({}, function(err, groups){
             groups.forEach(function(group){
-                res_groups.push(group._id);
+                if (req.session.passport){
+                    if (group.users.indexOf(req.session.passport.user) > -1) res_groups.push(group._id);
+                }
+
             });
             var data = {
                 groups: res_groups

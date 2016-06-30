@@ -1,7 +1,7 @@
 var q = require('q');
 var net = require('net');
 
-var RECOMMENDATION_HOST = '132.73.196.196';
+var RECOMMENDATION_HOST = '127.0.0.1';
 var RECOMMENDATION_PORT = 5000;
 
 module.exports = {
