@@ -13,12 +13,16 @@ module.exports = function(io){
   var configDB = require('./config/database.js');
   mongoose.connect(configDB.users_url);
   var db = mongoose.connection;
+
+
   db.on('error', console.error.bind(console, 'db connection error'));
+  
   db.once('open', function(){console.log('succefully connected to mongodb');});
 
   /**
    * Express Middleware of the server
    */ 
+  
   require('./middleware')(app, express, passport, mongoose, io);
 
   /**
@@ -30,6 +34,6 @@ module.exports = function(io){
   * Error handlers the server
   */ 
   require('./server_critic_error_handlers').handleerror(app);
-
+/* adding a comment cause why not */
   return app;
 };
